@@ -24,7 +24,8 @@ const Coin = styled.li`
   a {
     padding: 20px;
     transition: color 0.2s ease-in;
-    display: block;
+    display: flex;
+    align-items: center;
   }
   &:hover {
     a {
@@ -39,6 +40,15 @@ const Title = styled.h1`
 const Loading = styled.span`
   text-align: center;
   display: block;
+`;
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+`;
+const CoinWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 export interface CoinInterface {
   id: string;
@@ -57,7 +67,6 @@ const Coins = () => {
     (async () => {
       const coinData = await getCoins();
       setLoading(false);
-      console.log(coinData);
       const array: CoinInterface[] = coinData.slice(0, 100);
       //splice() 메소드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경한다
       //slice() == 새로운 배열
@@ -76,7 +85,18 @@ const Coins = () => {
         ) : (
           coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link
+                to={`/${coin.id}
+              `}
+                state={{ name: coin.name, rank: coin.rank }}
+              >
+                <CoinWrapper>
+                  <Img
+                    src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
+                  ></Img>
+                  {coin.name} &rarr;
+                </CoinWrapper>
+              </Link>
             </Coin>
           ))
         )}
