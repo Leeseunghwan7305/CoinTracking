@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { sortAndDeduplicateDiagnostics } from "typescript";
@@ -60,19 +61,20 @@ export interface CoinInterface {
   type: string;
 }
 const Coins = () => {
-  let [coins, setCoins] = useState<CoinInterface[]>([]);
-  let [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    //useEffect에서 동기 처리할려면?
-    (async () => {
-      const coinData = await getCoins();
-      setLoading(false);
-      const array: CoinInterface[] = coinData.slice(0, 100);
-      //splice() 메소드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경한다
-      //slice() == 새로운 배열
-      setCoins(array);
-    })();
-  }, []);
+  const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", getCoins);
+  // let [coins, setCoins] = useState<CoinInterface[]>([]);
+  // let [loading, setLoading] = useState<boolean>(true);
+  // useEffect(() => {
+  //   //useEffect에서 동기 처리할려면?
+  //   (async () => {
+  //     const coinData = await getCoins();
+  //     setLoading(false);
+  //     const array: CoinInterface[] = coinData.slice(0, 100);
+  //     //splice() 메소드는 배열의 기존 요소를 삭제 또는 교체하거나 새 요소를 추가하여 배열의 내용을 변경한다
+  //     //slice() == 새로운 배열
+  //     setCoins(array);
+  //   })();
+  // }, []); 컨트롤+K 컨트롤 +C
 
   return (
     <Container>
@@ -80,10 +82,10 @@ const Coins = () => {
         <Title>코인</Title>
       </Header>
       <CoinList>
-        {loading ? (
+        {isLoading ? (
           <Loading>Loading...</Loading>
         ) : (
-          coins.map((coin) => (
+          data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={`/${coin.id}

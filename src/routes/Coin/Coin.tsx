@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 const Coin = () => {
   let [loading, setLoading] = useState<boolean>(true);
   const { coinID } = useParams() as unknown as RouteParams;
+
   const location = useLocation();
   const state = location.state as RouterState;
   const [info, setInfo] = useState<InfoData>();
