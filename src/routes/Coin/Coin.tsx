@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Route, Routes, useParams } from "react-router-dom";
+import {
+  useLocation,
+  Route,
+  Routes,
+  useParams,
+  useMatch,
+} from "react-router-dom";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 import { InfoData, PriceData, RouteParams, RouterState } from "../../type/type";
@@ -11,8 +17,11 @@ import {
   Overview,
   OverviewItem,
   Description,
+  Tabs,
+  Tab,
 } from "./CoinCss";
 import { getInfoData, getPriceData } from "../../api/api";
+import { Link } from "react-router-dom";
 
 const Coin = () => {
   let [loading, setLoading] = useState<boolean>(true);
@@ -21,6 +30,10 @@ const Coin = () => {
   const state = location.state as RouterState;
   const [info, setInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
+  const priceMatch = useMatch("/:coinID/price");
+  const chartMatch = useMatch("/:coinID/chart");
+  console.log(priceMatch);
+  console.log(chartMatch);
   useEffect(() => {
     (async () => {
       let infoData = await getInfoData(coinID);
@@ -66,6 +79,14 @@ const Coin = () => {
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
+          <Tabs>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinID}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinID}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
           <Outlet />
         </>
       )}
