@@ -96,7 +96,7 @@ const Coin = () => {
               <Link to={`/${coinID}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          <Outlet />
+          <Outlet context={{ coinID }} />
         </>
       )}
     </Container>
