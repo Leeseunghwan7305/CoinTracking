@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import {
   useLocation,
   Route,
@@ -33,7 +34,8 @@ const Coin = () => {
   );
   const { isLoading: priceLoading, data: priceData } = useQuery<PriceData>(
     ["price", coinID],
-    () => getPriceData(coinID)
+    () => getPriceData(coinID),
+    { refetchInterval: 5000 }
   );
   const location = useLocation();
   const state = location.state as RouterState;
@@ -54,6 +56,11 @@ const Coin = () => {
   const loading = infoLoading || priceLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}

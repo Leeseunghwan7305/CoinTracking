@@ -9,8 +9,12 @@ interface OutLetProps {
 
 function Chart() {
   const { coinID } = useOutletContext<OutLetProps>();
-  const { isLoading, data } = useQuery<ChartData[]>(["ohlcv", coinID], () =>
-    fetchCoinHistory(coinID)
+  const { isLoading, data } = useQuery<ChartData[]>(
+    ["ohlcv", coinID],
+    () => fetchCoinHistory(coinID),
+    {
+      refetchInterval: 10000,
+    }
   );
   return (
     <div>
