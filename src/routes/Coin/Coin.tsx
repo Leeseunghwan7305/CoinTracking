@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import {
   useLocation,
@@ -25,11 +25,16 @@ import {
 import { getInfoData, getPriceData } from "../../api/api";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../../atom";
 
 const Button = styled.button`
   padding: 15px;
 `;
+
 const Coin = () => {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const isDark = useRecoilValue(isDarkAtom);
   let navigate = useNavigate();
   const { coinID } = useParams() as unknown as RouteParams;
 
@@ -71,6 +76,13 @@ const Coin = () => {
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <button
+          onClick={() => {
+            setDarkAtom((prev) => !prev);
+          }}
+        >
+          Toggle Mode
+        </button>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
