@@ -6,6 +6,7 @@ import {
   Routes,
   useParams,
   useMatch,
+  useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
@@ -25,7 +26,11 @@ import { getInfoData, getPriceData } from "../../api/api";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 
+const Button = styled.button`
+  padding: 15px;
+`;
 const Coin = () => {
+  let navigate = useNavigate();
   const { coinID } = useParams() as unknown as RouteParams;
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
@@ -62,6 +67,7 @@ const Coin = () => {
         </title>
       </Helmet>
       <Header>
+        <Button onClick={() => navigate("/")}>뒤로가기</Button>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
